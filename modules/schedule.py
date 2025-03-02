@@ -1,4 +1,4 @@
-from pulumi_pagerduty import Schedule, ScheduleLayer
+from pulumi_pagerduty import Schedule
 from typing import List
 from datetime import datetime, timedelta
 
@@ -13,14 +13,17 @@ class PagerDutySchedule:
 
     def create_rotation(self, users: List[str], rotation_virtual_start: str, 
                        rotation_length_days: int = 7):
-        layer = ScheduleLayer(
-            "primary-layer",
-            schedule_id=self.schedule.id,
-            name="Primary Rotation",
-            start=rotation_virtual_start,
-            rotation_virtual_start=rotation_virtual_start,
-            rotation_turn_length_seconds=rotation_length_days * 24 * 60 * 60,
-            users=users
-        )
+        layers=[{
+            "name": "Primary Rotation",
+            "start": rotation_virtual_start,
+            "rotation_virtual_start": rotation_virtual_start,
+            "rotation_turn_length_seconds": rotation_length_days * 24 * 60 * 60,
+            "users": users,
+            "restrictions": [{
+                "type": "daily_restriction",
+                "start_time_of_day": "08:00:00",
+                "duration_seconds": 32400,
+            }],
+        }],
         
         return self.schedule 
