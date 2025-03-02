@@ -1,4 +1,4 @@
-from pulumi_pagerduty import EscalationPolicy, EscalationRule
+from pulumi_pagerduty import EscalationPolicy
 from typing import List
 
 class PagerDutyEscalationPolicy:
@@ -8,15 +8,19 @@ class PagerDutyEscalationPolicy:
             name=name,
             team_id=team_id,
             num_loops=3,
-            rules=[
-                EscalationRule(
-                    escalation_delay_in_minutes=30,
-                    targets=[{
+            rules=[{
+                "escalation_delay_in_minutes": 10,
+                "targets": [
+                    {
                         "type": "schedule_reference",
                         "id": None  # Will be set when schedule is created
-                    }]
-                )
-            ]
+                    },
+                    {
+                        "type": "user_reference",
+                        "id": None 
+                    },
+                ],
+            }]            
         )
 
     def update_schedule_target(self, schedule_id: str):
