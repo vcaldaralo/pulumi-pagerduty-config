@@ -31,7 +31,7 @@ pagerduty-pulumi/
     ├── escalation_policy.py
     ├── service.py
     └── config.py
-```    
+```
 
 ## Installation
 
